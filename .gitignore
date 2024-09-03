@@ -8,3 +8,5 @@
 /PM-213.sln.DotSettings.user
 /.idea
 /App/Program.cs
+/App/App.csproj
+/Test/Test.csproj
