@@ -1,1 +1,9 @@
 ﻿/App/Notes/
+/App/bin
+/App/obj
+/Test/bin
+/Test/obj
+/TestResults
+/eXtremeProgramming.sln.DotSettings.user
+/PM-213.sln.DotSettings.user
+/.idea
