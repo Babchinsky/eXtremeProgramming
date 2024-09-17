@@ -1,99 +1,22 @@
 ﻿using System.Text;
 
-namespace App;
-
-public record RomanNumber(int Value)
+namespace App
 {
-    private readonly int _value = Value; // TODO: Refactoring - exclude
 
-    public int Value
+
+    public record RomanNumber(int Value)
     {
-        get => _value;
-        init => _value = value;
-    }
+
+        public RomanNumber(String input) :
+            this(RomanNumberFactory.ParseAsInt(input))
+            {}
 
 
-    public static RomanNumber Parse(String input)
-    {
-        int value = 0;
-        int prevDigit = 0; // TODO: rename to  ~rightDigit
-        int pos = input.Length;
-        List<String> errors = new();
-        foreach (char c in input.Reverse())
+        public override string? ToString()
         {
-            pos -= 1;
-            int digit;
-            try
-            {
-                digit = DigitalValue(c.ToString());
-            }
-            catch
-            {
-                errors.Add($"Invalid symbol '{c}' in position {pos}");
-                continue;
-            }
-
-            if (digit != 0 && prevDigit / digit > 10)
-            {
-                errors.Add($"Invalid order '{c}' before '{input[pos + 1]}' in position {pos}");
-            }
-
-
-            value += digit >= prevDigit ? digit : -digit;
-            prevDigit = digit;
-        }
-
-        if (errors.Any())
-        {
-            throw new FormatException(string.Join("; ", errors));
-        }
-
-        return new RomanNumber(value);
-    }
-
-
-    public static int DigitalValue(String digit)
-    {
-        return digit switch
-        {
-            "N" => 0,
-            "I" => 1,
-            "V" => 5,
-            "X" => 10,
-            "L" => 50,
-            "C" => 100,
-            "D" => 500,
-            "M" => 1000,
-            _ => throw new ArgumentException(
-                $" {nameof(RomanNumber)} : {nameof(DigitalValue)}: 'digit' has invalid value '{digit}'")
-        };
-    }
-
-    public RomanNumber Plus(RomanNumber other)
-    {
-        return this with { Value = Value + other.Value };
-    }
-
-    public RomanNumber Plus(string other)
-    {
-        return this with { Value = Value + Parse(other).Value };
-    }
-    /*ДЗ Скласти тести, що перевіряють роботу метода Plus
-     * з використанням римських записів чисел, наприклад
-     * IV + VI = X
-     */
-
-    public override string? ToString()
-    {
-        //3343->MMMCCCXLIII
-        // MMM
-        // D (500) X
-        // CD (400) X
-        // CCC
-        // LX
-        // III
-        if (_value == 0) return "N";
-        Dictionary<int, string> parts = new()
+            
+            if (Value == 0) return "N";
+            Dictionary<int, String> parts = new()
         {
             { 1000, "M" },
             { 900, "CM" },
@@ -109,30 +32,26 @@ public record RomanNumber(int Value)
             { 4, "IV" },
             { 1, "I" },
         };
-
-
-        int v = _value;
-
-        StringBuilder sb = new();
-
-        foreach (var part in parts)
-        {
-            while (v >= part.Key)
+            int v = Value;
+            StringBuilder sb = new();
+            foreach (var part in parts)
             {
-                v -= part.Key;
-                sb.Append(part.Value);
+                while (v >= part.Key)
+                {
+                    v -= part.Key;
+                    sb.Append(part.Value);
+                }
             }
+            return sb.ToString();
         }
 
-        return sb.ToString();
+        public Int32 ToInt() => Value;
+        public Int16 ToShort() => (Int16)Value;
+        public UInt16 ToUnsignedShort() => (UInt16)Value;
+        public UInt32 ToUnsignedInt() => (UInt32)Value;
+
+        public Single ToFloat() => (Single)Value;
+        public Double ToDouble() => (Double)Value;
+
     }
 }
-
-
-/* Повторити основи управління програмними проєктами
- * Закласти рішення (solution) з двома проєктами (App, Test)
- * Налаштувати запуск тестів
- * *Реалізувати парсер одиночних цифр римських чисел, додати тести до них
- * Форми здачі:
- * -архів з проєктом та скріншотами або посилання на github
- */
