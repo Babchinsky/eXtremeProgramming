@@ -14,8 +14,8 @@ namespace Test
         public void PlusTest()
         {
             RomanNumber
-               rn1 = new(1),
-               rn2 = new(2),
+                rn1 = new(1),
+                rn2 = new(2),
                 rn0 = new(0);
 
             Assert.AreEqual(3,
